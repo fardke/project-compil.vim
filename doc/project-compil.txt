@@ -1,0 +1,65 @@
+*project-compil.txt*    Allow you to create a config file to set different compilation command.
+
+====================================================================================
+CONTENTS                                                            *Project-Compil*
+
+    1. Intro ....................... |ProjectCompilIntro|
+    2. Usage ....................... |ProjectCompilUsage|
+    3. Configuration ............... |ProjectCompilConfiguration|
+
+====================================================================================
+1. Intro                                                        *ProjectCompilIntro*
+
+You know that vim lets you call make directly from your editor. With this plugin you
+can change command called through configurration file and you can call configure
+command.
+
+In addition, you can use MakeDoc command to compile documentation directly and browse
+errors directly in your editor.
+
+Then, if exuberant-ctags is installed, it will try to make tags file in the sources
+root directory.
+
+====================================================================================
+2. Usage                                                        *ProjectCompilUsage*
+
+To load configuration file call: >
+
+    :LoadProject
+
+Then you can call: >
+
+    :Configure
+    :make
+    :make install
+
+To configure, make and install you project.
+
+You can call: >
+
+    :MakeDoc
+
+To compile the project documentation.
+
+====================================================================================
+3. Configuration                                        *ProjectCompilConfiguration*
+
+Create a .vproject file at root directory of your source project: >
+
+    let g:makeprg='sudo make V=0 -j1'
+    let g:build_dir='@PROJECT_DIR@/build'
+    let g:confprg='sudo ../configure --prefix=${ROOT}/usr/ --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib'
+    let g:confopts='--enable-tests --enable-debug --enable-syslog'
+    let g:makedocprg='make_doc build'
+    let g:include_dir='${target}/root/usr/include/'
+
+
+* g:makeprg: program to call to compile, defaults to 'make'
+* g:build_dir: the directory to build the project, defaults to '@PROJECT_DIR@/build'
+* g:confprg: program to call to run configure, defaults to @PROJECT_DIR@/configure'
+* g:confopts: configure options, defaults to ''
+* g:makedocprg: program to call to compile documentation. Defaults to ''
+* g:makedocarg: documentation compilation options. Defaults to ''
+* g:include_dir: the directory where search includes with ctags to create tags file.
+
+====================================================================================
