@@ -39,10 +39,6 @@ function! s:Init(proj_file)
       exec "let " . var . " = substitute(" . var . ", '@PROJECT_DIR@', l:proj_dir, '')"
     endfor
 
-    let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ./src ./include ./tests ' . g:include_dir
-
-    let ret = system(cmd)
-
     execute 'set makeprg=' . escape('cd ' . g:build_dir . '; ' . g:makeprg, ' ')
     execute 'com! -nargs=* Configure !' . 'mkdir -p ' . g:build_dir . ';cd ' . g:build_dir . '; ' . g:confprg . ' <args> ' . g:confopts
     execute 'com! -nargs=* MakeDoc !' . g:makedocprg . ' <args> ' . g:makedocarg
