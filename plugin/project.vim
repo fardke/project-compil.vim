@@ -38,7 +38,6 @@ function! s:Init(proj_file)
     call s:initVariable('g:makedocarg', '')
     call s:initVariable('g:include_dir', '/usr/include')
 
-    echo g:include_dir
     let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q . ' . g:include_dir
     let ret = system(cmd)
 
