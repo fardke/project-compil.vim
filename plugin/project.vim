@@ -1,13 +1,16 @@
 let s:project_file = ".vproject"
+let s:extra_tags = ".extra_tags"
 
-function! s:FindDir()
-  let l:dir = fnamemodify(getcwd(), ':p') . '.'
-  while dir != fnamemodify(dir, ':h')
-    let dir = fnamemodify(dir, ':h')
-    if filereadable(dir . '/' . s:project_file)
-      return dir . '/' . s:project_file
-    endif
-  endwhile
+function! s:FindDir(file)
+  if !empty(a:file)
+    let l:dir = fnamemodify(getcwd(), ':p') . '.'
+    while dir != fnamemodify(dir, ':h')
+      let dir = fnamemodify(dir, ':h')
+      if filereadable(dir . '/' . a:file)
+        return dir . '/' . a:file
+      endif
+    endwhile
+  endif
   return ''
 endfunc
 
@@ -35,6 +38,16 @@ function! s:Init(proj_file)
     call s:initVariable('g:makedocarg', '')
     call s:initVariable('g:include_dir', '/usr/include')
 
+    echo g:include_dir
+    let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q . ' . g:include_dir
+    let ret = system(cmd)
+
+    let l:tags = l:proj_dir . '/tags'
+    if filereadable(l:tags)
+      execute 'set tags+=' . l:tags
+      return 1
+    endif
+
     for var in l:proj_vars
       exec "let " . var . " = substitute(" . var . ", '@PROJECT_DIR@', l:proj_dir, '')"
     endfor
@@ -48,6 +61,6 @@ function! s:Init(proj_file)
   endif
 endfunc
 
-:com! LoadProject :call s:Init(s:FindDir())
+:com! LoadProject :call s:Init(s:FindDir(s:project_file))
 
 " vim:set sts=2 sw=2:
